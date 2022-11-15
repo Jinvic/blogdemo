@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="renderer" content="webkit" />
+    <title>Java中bufferimage透明度相关处理 - Jinvic's blogs</title>
+    <meta name="keywords" content="Jinvic blog">
+    <meta name="description" content="Jinvic's blogs">
+    <link rel="shortcut icon" href="../img/Jinvic.jpg">
+    <link href="../css/base.css" rel="stylesheet" type="text/css">
+    <script src="../js/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="../js/base.js" type="text/javascript"></script>
+    <script src="../js/jquery.slides.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+    <div class="head_box" id="top">
+        <div class="header">
+            <div class="header_logo">
+                <a href="../index.html">
+                    <h2>Jinvic's blogs</h2>
+                </a>
+            </div>
+            <div class="header_nav">
+                <ul class="clearfix">
+                    <li><a href="../index.html">主页</a></li>
+
+                    <li class="have_second">
+                        <a href="#">类别</a>
+                        <ul class="nav_second">
+                            <i></i>
+                            <li><a href="../list.html#C/C++">C/C++相关</a></li>
+                            <li><a href="../list.html#Java">Java相关</a></li>
+                            <li><a href="../list.html#python">python相关</a></li>
+                            <li><a href="../list.html#Web">Web相关</a></li>
+                            <li><a href="../list.html#Others">其他</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="../list.html">全部文章</a></li>
+                    <li><a href="../about_me.html">关于我</a></li>
+                </ul>
+            </div>
+            <div class="header_search">
+                <a href="javascript:void(0);" class="header_search_btn">
+                    <!--<img src="img/search.png">-->
+                    <i></i>
+                </a>
+            </div>
+
+            <div class="header_nav_small_btn">
+                <span class="small_btn"></span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="nav_hidden"></div>
+
+    <div class="search_box">
+        <div class="search">
+            <form name="searchform" class="search_form" method="post" action="[!--news.url--]e/search/index.php"
+                target="_blank">
+                <input type="text" class="search_text" name="keyboard" placeholder="输入关键字点击搜索">
+                <input type="hidden" name="tbname" value="news">
+                <input type="hidden" name="show" value="title">
+                <input type="hidden" name="tempid" value="1">
+                <input type="submit" class="search_btn" value="搜索一下">
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <div class="article_box clearfix">
+
+
+
+        <div class="left">
+
+
+
+            <div class="article_content_box clearfix">
+
+                <div class="article_article_title">
+                    <h3>正文
+                        <span>您当前的位置：<a href="../index.html">首页></a><a href="../list.html">列表页></a><a
+                                href="#">内容页</a></span>
+                    </h3>
+                </div>
+
+                <h3 class="article_content_title">Java中bufferimage透明度相关处理</h3>
+                <div class="article_author_count_box clearfix">
+                    <i class="article_author_img" title="Jinvic"><img src="../img/Jinvic.jpg"></i><a
+                        class="article_author" href="#">Jinvic</a>
+                    <p>发表时间：2022-11-15</p>
+                </div>
+                <div class="article_info">
+                    <p><b>简介&nbsp;&nbsp;</b>对Java中bufferimage透明度的判断与设置</p>
+                </div>
+                <div class="article_content">
+                    <p>*这是项目<a href="https://github.com/Jinvic/CaptchaLogin" target="_blank"
+                            style="text-decoration:underline;">《基于JSP的滑块验证码登录界面的理解与实现》</a>的子项目</p>
+                    <p>在阅读后端代码的过程中，我们发现其对于图片的切割和处理做的并不理想，于是在查询相关资料后对其做出修改。</p>
+                    <p>首先简单介绍一下其原理，即在原图中随机选择一个矩形区域，遍历每一个像素记录rgb值，
+                        再将其绘制到滑块图片上，对原图的这个区域进行半透明化。</p>
+                    <p>效果如下，这是处理前的图片：</p>
+                    <img src="../img/Java1-221115/row-w.png" alt="处理前滑块图片">
+                    <img src="../img/Java1-221115/row.jpg" alt="处理前原图片">
+                    <p>这是处理后的图片</p>
+                    <img src="../img/Java1-221115/code1.jpg" alt="原处理代码">
+                    <img src="../img/Java1-221115/unmodified-w.gif" alt="处理前滑块图片">
+                    <img src="../img/Java1-221115/code2.png" alt="原处理代码">
+                    <img src="../img/Java1-221115/unmodified.gif" alt="处理前原图片">
+                    <p>可以看到，在渲染滑块图片时，他只留下了边框未处理，其他全部渲染，这明显与我们的目标不符。
+                        而之后处理原图的缺口区域时只进行了半透明化，效果不明显。这显然不能让我们满意。
+                    </p>
+                    <p>要对图像颜色和透明度进行修改，首先我们要知道计算机是如何判断颜色和透明度的，
+                        即int BufferedImage.getRGB()的返回值的含义。</p>
+                    <p>查询资料后我们了解到，返回的这个32位的int型数据，使用前8位来存储透明度alpha，剩下24位每8位分别存储rgb值。</p>
+                    <img src="../img/Java1-221115/code3.jpg" alt="int存储argb">
+                    <p>所以我们就可以可以使用位掩码提取或设置组件：</p>
+                    <code>
+                        int blue = color & 0xff;<br>
+                        int green = (color & 0xff00) >> 8;<br>
+                        int red = (color & 0xff0000) >> 16;<br>
+                        int alpha = (color & 0xff000000) >>> 24;<br>
+                    </code>
+                    <p>在了解这些后，我们开始进行修改。对滑块图片，我们只渲染未透明部分，同时将原图的对应区域渲染为白色。效果如下：</p>
+                    <img src="../img/Java1-221115/modified-w.png" alt="修改后滑块图片">
+                    <img src="../img/Java1-221115/modified.png" alt="修改后原图片">
+                    <p>最终效果：</p>
+                    <img src="../img/Java1-221115/down.jpg" alt="最终效果">
+                    <br>
+                    <br>
+                    <br>
+                    <p>参考：</p>
+                    <a
+                        href="https://blog.csdn.net/weixin_34279572/article/details/124683340">【java使用BufferedImage和Graphics2D制作背景透明的水印】</a>
+                    <br>
+                    <a href="https://qa.1r1g.com/sf/ask/1803300691/">了解BufferedImage.getRGB输出值</a>
+                    <br>
+                    <br>
+                    <br>
+                    <p>这里是内容
+                    </p>
+                    <br>
+                </div>
+
+
+
+                <div class="article_end">
+                    <p>注：本文由：<a href="../about_me.html">Jinvic</a> 发表，其版权均为作者所有，如需转载请注明文章出处及作者。</p>
+                </div>
+
+                <div class="article_prev_next_box">
+                    <a href="../nothing.html">上一章：还没写</a>
+                    <a href="../nothing.html">下一章：还没写</a>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+        <div class="right">
+            <!--个人介绍部分-->
+            <div class="self_info right_box">
+                <img src="../img/Jinvic.jpg">
+                <div class="self_info_text">
+                    <h3>Jinvic</h3>
+                    <div>
+                        <p>软件工程本科在读</p>
+                        <p>21年icpcicpc昆明站铜奖</p>
+                        <p>十三届蓝桥杯C++B组国赛二等奖</p>
+                    </div>
+                </div>
+            </div>
+            <!--个人介绍隐藏部分，只在右侧被翻到最上面显示-->
+            <div class="self_info_scroll_bottom right_box">
+                <img src="../img/Jinvic.jpg">
+                <div class="self_info_text">
+                    <h3>Jinvic</h3>
+                    <div>
+                        <p>软件工程本科在读</p>
+                        <p>21年icpcicpc昆明站铜奖</p>
+                        <p>十三届蓝桥杯C++B组国赛二等奖</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--座右铭目的把div对齐最多只能2行字，多了就高了-->
+            <div class="self_textbox right_box">
+                <h3>人机交互-Web设计作业
+                    <br>
+                    已上传至<a href="#" style="color:blue;text-decoration: underline;">Github</a>
+                </h3>
+
+
+            </div>
+
+            <div class="right_box rellinks_list">
+                <h3>相关链接</h3>
+                <div>
+                    <ul>
+                        <li><a href="https://github.com/Jinvic">Github</a></li>
+                        <li><a href="https://codeforces.com/profile/Jinvic">Codeforces</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer_box">
+    </div>
+
+</body>
+
+</html>
