@@ -7,27 +7,27 @@ $(function () {
     mousehover_changeimgsrc();
 });
 //记录鼠标滑轮事件 显示 一键向上的按钮  和把个人介绍固定
-function mouse_scroll_change() {
-    if ($(".self_info").length > 0) {
-        $(window).load(function () {
-            $(".self_info_scroll_bottom").html($(".self_info").html());
-            var right_height = $(".right").height();
-            var right_right = ($(window).width() - $(".article_box").width()) / 2;
-            // var right_left=$(".right").offset().left
-            // console.log("right的高度现在是"+($(".right").offset().top+right_height))
-            $(window).scroll(function () {
-                // console.log("页面已经被吞入"+$(window).scrollTop())
-                // console.log("right的高度现在是"+($(".right").offset().top+right_height))
-                if ($(window).scrollTop() > ($(".right").offset().top + right_height)) {
-                    $(".self_info_scroll_bottom").stop().animate({ top: 0, right: right_right, opacity: 1 });
-                } else if ($(window).scrollTop() <= ($(".right").offset().top + right_height)) {
-                    $(".self_info_scroll_bottom").stop().animate({ top: 0, right: 0, opacity: 0 });
-                }
-            })
-        })
-    }
+// function mouse_scroll_change() {
+//     if ($(".self_info").length > 0) {
+//         $(window).load(function () {
+//             $(".self_info_scroll_bottom").html($(".self_info").html());
+//             var right_height = $(".right").height();
+//             var right_right = ($(window).width() - $(".article_box").width()) / 2;
+//             // var right_left=$(".right").offset().left
+//             // console.log("right的高度现在是"+($(".right").offset().top+right_height))
+//             $(window).scroll(function () {
+//                 // console.log("页面已经被吞入"+$(window).scrollTop())
+//                 // console.log("right的高度现在是"+($(".right").offset().top+right_height))
+//                 if ($(window).scrollTop() > ($(".right").offset().top + right_height)) {
+//                     $(".self_info_scroll_bottom").stop().animate({ top: 0, right: right_right, opacity: 1 });
+//                 } else if ($(window).scrollTop() <= ($(".right").offset().top + right_height)) {
+//                     $(".self_info_scroll_bottom").stop().animate({ top: 0, right: 0, opacity: 0 });
+//                 }
+//             })
+//         })
+//     }
 
-}
+// }
 //学习笔记btn按钮显示影藏下面的文章列表
 function click_show_hide_article_btn_box_item() {
     $(".article_btn ul li").click(function () {
