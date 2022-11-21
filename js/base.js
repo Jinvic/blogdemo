@@ -1,12 +1,12 @@
 $(function () {
     click_small_btn();
     header_search_btn();
-    mouse_scroll_change();
+    // mouse_scroll_change();
     banner_img_url_click();
     click_show_hide_article_btn_box_item();
     mousehover_changeimgsrc();
 });
-//记录鼠标滑轮事件 显示 一键向上的按钮  和把个人介绍固定
+// 记录鼠标滑轮事件 显示 一键向上的按钮  和把个人介绍固定
 // function mouse_scroll_change() {
 //     if ($(".self_info").length > 0) {
 //         $(window).load(function () {
